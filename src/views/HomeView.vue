@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>{{ mm }}}</h1>
+    <h1>{{ mm }}</h1>
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
@@ -15,8 +15,10 @@ export default {
   components: {
     HelloWorld
   },
-  data: {
-    mm: "10011000"
+  data() {
+    return {
+      mm: "10011000_1"
+    }
   }
 }
 </script>
