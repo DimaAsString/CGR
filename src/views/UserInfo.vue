@@ -22,7 +22,7 @@
       <el-table-column label="诚信值" prop="credit">
         <template slot-scope="scope">
           <el-tag type="danger" v-if="scope.row.credit<60">信用较差</el-tag>
-          <el-tag type="primary" v-if="scope.row.credit>=60 && scope.row.credit<90">信用正常</el-tag>
+          <el-tag type="primary" v-if="scope.row.credit>=60 && scope.row.credit<90">信用良好</el-tag>
           <el-tag type="success" v-if="scope.row.credit>=90">信用优秀</el-tag>
         </template>
       </el-table-column>
