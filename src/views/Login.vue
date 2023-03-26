@@ -46,7 +46,7 @@ export default {
           // TODO: 处理登录逻辑
           if(this.form.username =='admin' && this.form.password == 'ping0000'){
             alert("登录成功")
-            this.$router.push('/login')
+            this.$router.push('/register')
           } else {
             console.log('校验成功')
           }
