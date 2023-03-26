@@ -7,6 +7,7 @@ import './assets/globe.css';
 
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
+import UserInfo from "@/views/UserInfo.vue";
 
 Vue.config.productionTip = false
 
@@ -14,6 +15,7 @@ const router = new VueRouter({
   routes: [
     { path: '/login', component: Login },
     { path: '/register', component: Register },
+    { path: '/userinfo', component: UserInfo },
   ]
 })
 
@@ -23,5 +25,5 @@ Vue.use(VueRouter)
 
 new Vue({
   router,
-  render: h => h(Register)
+  render: h => h(UserInfo)
 }).$mount('#app')
