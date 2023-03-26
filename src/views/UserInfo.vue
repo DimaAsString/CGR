@@ -19,7 +19,13 @@
       <el-table-column label="最近登录时间" prop="lastLoginTime"></el-table-column>
       <el-table-column label="注册时间" prop="registerTime"></el-table-column>
       <el-table-column label="信息更新时间" prop="updateTime"></el-table-column>
-      <el-table-column label="诚信值" prop="credit"></el-table-column>
+      <el-table-column label="诚信值" prop="credit">
+        <template slot-scope="scope">
+          <el-tag type="danger" v-if="scope.row.credit<60">信用较差</el-tag>
+          <el-tag type="primary" v-if="scope.row.credit>=60 && scope.row.credit<90">信用正常</el-tag>
+          <el-tag type="success" v-if="scope.row.credit>=90">信用优秀</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" fixed="right" width="200">
         <template slot-scope="scope">
           <el-button type="primary" @click="editUser(scope.row)">修改</el-button>
@@ -58,7 +64,7 @@ export default {
           lastLoginTime: '2021-08-02 10:00:00',
           registerTime: '2021-02-01 00:00:00',
           updateTime: '2021-08-02 10:00:00',
-          credit: 98,
+          credit: 10,
         },
         {
           name: '王五',
@@ -70,7 +76,7 @@ export default {
           lastLoginTime: '2021-08-03 10:00:00',
           registerTime: '2021-03-01 00:00:00',
           updateTime: '2021-08-03 10:00:00',
-          credit: 99,
+          credit: 68,
         },
       ],
     };
