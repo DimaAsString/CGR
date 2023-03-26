@@ -87,7 +87,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           // 表单验证通过，提交表单
-          console.log('表单提交成功！')
+          alert("注册成功")
         }
       })
     },
