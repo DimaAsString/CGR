@@ -3,13 +3,13 @@
     <el-form ref="form" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">登录</h2>
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+        <el-input v-model="form.username" placeholder="请输入用户名" style="width: 300px;"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
+        <el-input v-model="form.password" type="password" placeholder="请输入密码" style="width: 300px;"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="login">登录</el-button>
+        <el-button type="primary" @click="login" style="width: 150px;margin-left: 40px;">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -74,9 +74,12 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("file/river.jpg");
 }
 .login-form {
   width: 400px;
+  background-color: rgba(179, 192, 209, 0.2);
+  border-radius: 10px;
 }
 .login-title {
   font-size: 24px;
