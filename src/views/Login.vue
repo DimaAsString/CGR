@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <h1>{{ form.mm }}</h1>
     <el-form ref="form" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">登录</h2>
       <el-form-item label="用户名" prop="username">
@@ -25,6 +26,7 @@ export default {
   data() {
     return {
       form: {
+        mm:'asdfasfd',
         username: '',
         password: ''
       },

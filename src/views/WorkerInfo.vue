@@ -16,11 +16,18 @@
       <el-container>
         <el-main>
           <div style="">
-            <el-input style="width: 200px; margin-left: 20px;" v-model="searchText" placeholder="请输入用户签到码"></el-input>
+            <el-button type="primary" icon="el-icon-plus">添加员工</el-button>
+            <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
+                      placeholder="请输入员工名称"></el-input>
+            <el-select style=" width: 150px;margin-left: 20px;" v-model="order" placeholder="请选择排序方式">
+              <el-option label="升序" value="asc"></el-option>
+              <el-option label="倒序" value="desc"></el-option>
+            </el-select>
             <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
           </div>
-          <div >
-            <el-table :data="users" style="width: 100%;  margin: 20px;" :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
+          <div>
+            <el-table :data="users" style="width: 100%;  margin: 20px;" :header-cell-style="{textAlign: 'center'}"
+                      :cell-style="{ textAlign: 'center' }">
               <el-table-column label="序号" width="50px;">
                 <template slot-scope="scope">{{ scope.$index + 1 }}</template>
               </el-table-column>
@@ -33,13 +40,15 @@
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="签到码" prop="code"></el-table-column>
               <el-table-column label="电话" prop="phone"></el-table-column>
               <el-table-column label="邮箱" prop="email"></el-table-column>
               <el-table-column label="最近登录时间" prop="lastLoginTime"></el-table-column>
+              <el-table-column label="注册时间" prop="registerTime"></el-table-column>
+              <el-table-column label="信息更新时间" prop="updateTime"></el-table-column>
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                  <el-button type="primary" @click="editUser(scope.row)">场地签到</el-button>
+                  <el-button type="primary" @click="editUser(scope.row)">修改</el-button>
+                  <el-button type="danger" @click="deleteUser(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -62,19 +71,41 @@ export default {
           name: '陈龙',
           nickname: '珅式',
           gender: 0,
-          code: '1008',
           phone: '13800138000',
           email: 'ShenSHI@test.com',
           lastLoginTime: '2021-08-01 10:00:00',
+          registerTime: '2021-01-01 00:00:00',
+          updateTime: '2021-08-01 10:00:00',
         },
         {
           name: '陈龙',
           nickname: '珅式',
           gender: 1,
-          code: '1006',
           phone: '13800138000',
           email: 'ShenSHI@test.com',
           lastLoginTime: '2021-08-01 10:00:00',
+          registerTime: '2021-01-01 00:00:00',
+          updateTime: '2021-08-01 10:00:00',
+        },
+        {
+          name: '陈龙',
+          nickname: '珅式',
+          gender: 0,
+          phone: '13800138000',
+          email: 'ShenSHI@test.com',
+          lastLoginTime: '2021-08-01 10:00:00',
+          registerTime: '2021-01-01 00:00:00',
+          updateTime: '2021-08-01 10:00:00',
+        },
+        {
+          name: '陈龙',
+          nickname: '珅式',
+          gender: 1,
+          phone: '13800138000',
+          email: 'ShenSHI@test.com',
+          lastLoginTime: '2021-08-01 10:00:00',
+          registerTime: '2021-01-01 00:00:00',
+          updateTime: '2021-08-01 10:00:00',
         },
       ],
     };
