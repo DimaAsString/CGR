@@ -1,17 +1,18 @@
 <template>
   <div style="height: 100%;">
     <el-container style="height:100%; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
         <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
         <p style="text-align: center; font-size: 14px;">当前操作员：
           <br> {{ admin_name }}
         </p>
 
-        <el-menu>
-          <el-menu-item index="1-1" style="text-align: center">概要展示</el-menu-item>
-          <el-menu-item index="1-2" style="text-align: center">登记签到</el-menu-item>
-          <el-menu-item index="1-3" style="text-align: center">员工管理</el-menu-item>
+        <el-menu default-active="2">
+          <el-menu-item index="1" style="text-align: center" @click="gotoShowInfo">概要展示</el-menu-item>
+          <el-menu-item index="2" style="text-align: center">登记签到</el-menu-item>
+          <el-menu-item index="3" style="text-align: center" @click="gotoWokerInfo">员工管理</el-menu-item>
         </el-menu>
+        <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
       </el-aside>
       <el-container>
         <el-main>
@@ -40,7 +41,15 @@
               <el-table-column label="最近登录时间" prop="lastLoginTime"></el-table-column>
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                  <el-button type="primary" @click="editUser(scope.row)">场地签到</el-button>
+                  <el-popconfirm
+                      style="margin-left: 10px;"
+                      title="是否为当前用户进行签到？"
+                      confirm-button-text='确认'
+                      cancel-button-text='取消'
+                      icon="el-icon-info"
+                      >
+                    <el-button type="primary" @click="editUser(scope.row)" icon="el-icon-edit" slot="reference">场地签到</el-button>
+                  </el-popconfirm>
                 </template>
               </el-table-column>
             </el-table>
@@ -91,7 +100,6 @@ export default {
     },
     search() {
       // 搜索操作
-
       const data = {username: '222', password: '222'};
       const jsonStr = JSON.stringify(data)
       // 搜索操作
@@ -107,18 +115,36 @@ export default {
     },
     search2() {
       // 搜索操作
-      const data = {username: '222', password: '222'};
+      const data = {name: '1', password: '1'};
       const jsonStr = JSON.stringify(data)
       // 搜索操作
       axios({
             method: "post",
             url: "http://192.168.31.178:9000/adminuser/checkpasswd",
+            data: jsonStr
           }
       ).then((res) => {
         console.log(res.data);
       })
 
     },
+    // 跳转到登录页面
+    gotoTopPage(){
+      this.$toast.error('退出成功')
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 1500)
+    },
+
+    // 跳转到员工管理页面
+    gotoWokerInfo(){
+      this.$router.push('/WorkerInfo')
+    },
+
+    // 跳转到概要展示页面
+    gotoShowInfo(){
+      this.$router.push('/ShowInfo')
+    }
   },
 };
 </script>

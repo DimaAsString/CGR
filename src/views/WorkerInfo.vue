@@ -1,22 +1,23 @@
 <template>
   <div style="height: 100%;">
     <el-container style="height:100%; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
         <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
         <p style="text-align: center; font-size: 14px;">当前操作员：
           <br> {{ admin_name }}
         </p>
 
-        <el-menu>
-          <el-menu-item index="1-1" style="text-align: center">概要展示</el-menu-item>
-          <el-menu-item index="1-2" style="text-align: center">登记签到</el-menu-item>
-          <el-menu-item index="1-3" style="text-align: center">员工管理</el-menu-item>
+        <el-menu default-active="3">
+          <el-menu-item index="1" style="text-align: center" @click="gotoShowInfo">概要展示</el-menu-item>
+          <el-menu-item index="2" style="text-align: center" @click="gotoUserInfo">登记签到</el-menu-item>
+          <el-menu-item index="3" style="text-align: center">员工管理</el-menu-item>
         </el-menu>
+        <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
       </el-aside>
       <el-container>
         <el-main>
           <div style="">
-            <el-button type="primary" icon="el-icon-plus">添加员工</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="DialogVisible = true">添加员工</el-button>
             <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
                       placeholder="请输入员工名称"></el-input>
             <el-select style=" width: 150px;margin-left: 20px;" v-model="order" placeholder="请选择排序方式">
@@ -47,8 +48,48 @@
               <el-table-column label="信息更新时间" prop="updateTime"></el-table-column>
               <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                  <el-button type="primary" @click="editUser(scope.row)">修改</el-button>
-                  <el-button type="danger" @click="deleteUser(scope.row)">删除</el-button>
+                  <el-button type="primary" @click="DialogVisible = true">修改</el-button>
+                  <el-dialog
+                      title="提示"
+                      :visible.sync="DialogVisible"
+                      width="30%"
+                      center>
+                    <div style="width: 100%;text-align: center;">
+                      <span style="width: 30%;margin-top: 10px;">员工姓名:</span>
+                      <el-input v-model="form.username" style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
+                      <br>
+                      <span style="width: 30%;margin-top: 10px;">员工密码:</span>
+                      <el-input type="password" v-model="form.password" style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
+                      <br>
+                      <span style="width: 30%;margin-top: 10px;">员工昵称:</span>
+                      <el-input v-model="form.nickname" style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
+                      <br>
+                          <span style="width: 30%;margin-top: 10px;">员工性别:</span>
+                          <el-radio v-model="form.gender" label="0" style="margin-top: 10px;margin-left: 16px;">男</el-radio>
+                          <el-radio v-model="form.gender" label="1" style="margin-top: 10px;">女</el-radio>
+                      <br>
+                      <span style="width: 30%;">员工手机:</span>
+                      <el-input v-model="form.phone" style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
+                      <br>
+                      <span style="width: 30%;margin-top: 10px;">员工邮箱:</span>
+                      <el-input v-model="form.email" style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
+                    </div>
+
+
+                    <span slot="footer" class="dialog-footer">
+                      <el-button @click="DialogVisible = false">取 消</el-button>
+                      <el-button type="primary" @click="DialogVisible = false">确 定</el-button>
+                    </span>
+                  </el-dialog>
+                  <el-popconfirm
+                      style="margin-left: 10px;"
+                      title="确定是否删除该员工？"
+                      confirm-button-text='确认'
+                      cancel-button-text='取消'
+                      icon="el-icon-info"
+                      icon-color="red">
+                    <el-button type="danger" @click="deleteUser(scope.row)" slot="reference">删除</el-button>
+                  </el-popconfirm>
                 </template>
               </el-table-column>
             </el-table>
@@ -63,9 +104,19 @@
 export default {
   data() {
     return {
+      DialogVisible: false,
       admin_name: 'ChenShenShi',
       searchText: '',
       order: '',
+      form: {
+        username: '',
+        password: '',
+        confirmPassword: '',
+        nickname: '',
+        gender: '',
+        phone: '',
+        email: ''
+      },
       users: [
         {
           name: '陈龙',
@@ -111,14 +162,29 @@ export default {
     };
   },
   methods: {
-    editUser(user) {
-      // 编辑员工操作
-    },
     deleteUser(user) {
       // 删除员工操作
     },
     search() {
       // 搜索操作
+    },
+
+    // 跳转到登录页面
+    gotoTopPage() {
+      this.$toast.error('退出成功')
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 1500)
+    },
+
+    // 跳转到概要展示页面
+    gotoShowInfo() {
+      this.$router.push('/ShowInfo')
+    },
+
+    // 跳转到用户签到页面
+    gotoUserInfo() {
+      this.$router.push('/UserInfo')
     },
   },
 };

@@ -1,6 +1,5 @@
 <template>
   <div class="login-container">
-    <h1>{{ form.mm }}</h1>
     <el-form ref="form" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">登录</h2>
       <el-form-item label="用户名" prop="username">
@@ -18,6 +17,12 @@
 
 <script>
 // @ is an alias to /src
+import VueToast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
+import Vue from "vue";
+Vue.use(VueToast, {
+  timeout: 1500
+})
 
 export default {
   name: 'Login',
@@ -26,7 +31,6 @@ export default {
   data() {
     return {
       form: {
-        mm:'asdfasfd',
         username: '',
         password: ''
       },
@@ -47,8 +51,10 @@ export default {
         if (valid) {
           // TODO: 处理登录逻辑
           if(this.form.username =='admin' && this.form.password == 'ping0000'){
-            alert("登录成功")
-            this.$router.push('/register')
+            this.$toast.success('登录成功')
+            setTimeout(() => {
+              this.$router.push('/ShowInfo')
+            }, 1500)
           } else {
             console.log('校验成功')
           }

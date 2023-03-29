@@ -1,18 +1,18 @@
 <template>
   <div style="height: 100%;">
-    <el-button @click="search">asdawd</el-button>
     <el-container style="height:100%; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
         <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
         <p style="text-align: center; font-size: 14px;">当前操作员：
           <br> {{ admin_name }}
         </p>
 
-        <el-menu>
-          <el-menu-item index="1-1" style="text-align: center">概要展示</el-menu-item>
-          <el-menu-item index="1-2" style="text-align: center">登记签到</el-menu-item>
-          <el-menu-item index="1-3" style="text-align: center">员工管理</el-menu-item>
+        <el-menu default-active="1">
+          <el-menu-item index="1" style="text-align: center">概要展示</el-menu-item>
+          <el-menu-item index="2" style="text-align: center" @click="gotoUserInfo">登记签到</el-menu-item>
+          <el-menu-item index="3" style="text-align: center" @click="gotoWokerInfo">员工管理</el-menu-item>
         </el-menu>
+        <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
       </el-aside>
       <el-container>
         <el-main>
@@ -88,7 +88,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="address"
-                    label="地址">
+                    label="状态">
+                  <el-tag>已签到</el-tag>
                 </el-table-column>
               </el-table>
             </div>
@@ -110,7 +111,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="address"
-                    label="地址">
+                    label="状态">
+                  <el-tag type="danger">未签到</el-tag>
                 </el-table-column>
               </el-table>
             </div>
@@ -201,6 +203,23 @@ export default {
         console.log(res.data);
       })
     },
+
+    // 跳转到用户签到页面
+    gotoUserInfo(){
+      this.$router.push('/UserInfo')
+    },
+    // 跳转到员工管理页面
+    gotoWokerInfo(){
+      this.$router.push('/WorkerInfo')
+    },
+
+    gotoTopPage(){
+      this.$toast.error('退出成功')
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 1500)
+    }
+
   },
 };
 </script>
