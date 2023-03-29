@@ -29,5 +29,5 @@ Vue.use(VueRouter)
 
 new Vue({
   router,
-  render: h => h(ShowInfo)
+  render: h => h(UserInfo)
 }).$mount('#app')

@@ -18,6 +18,7 @@
           <div style="">
             <el-input style="width: 200px; margin-left: 20px;" v-model="searchText" placeholder="请输入用户签到码"></el-input>
             <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+            <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">搜索2</el-button>
           </div>
           <div >
             <el-table :data="users" style="width: 100%;  margin: 20px;" :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
@@ -51,6 +52,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -88,6 +91,33 @@ export default {
     },
     search() {
       // 搜索操作
+
+      const data = {username: '222', password: '222'};
+      const jsonStr = JSON.stringify(data)
+      // 搜索操作
+      axios({
+            method: "post",
+            url: "test.php",
+            data: jsonStr
+          }
+      ).then((res) => {
+        console.log(res.data);
+      })
+
+    },
+    search2() {
+      // 搜索操作
+      const data = {username: '222', password: '222'};
+      const jsonStr = JSON.stringify(data)
+      // 搜索操作
+      axios({
+            method: "post",
+            url: "http://192.168.31.178:9000/adminuser/checkpasswd",
+          }
+      ).then((res) => {
+        console.log(res.data);
+      })
+
     },
   },
 };

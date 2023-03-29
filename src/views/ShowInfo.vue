@@ -15,7 +15,7 @@
         </el-menu>
       </el-aside>
       <el-container>
-        <el-main >
+        <el-main>
           <div id="top_list">
             <el-card :body-style="{ padding: '0px' }" style="height: 350px;width: 250px;">
               <img src="../assets/篮球.jpg"
@@ -79,12 +79,12 @@
                 <el-table-column
                     prop="date"
                     label="日期"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
                     prop="name"
                     label="姓名"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
                     prop="address"
@@ -101,12 +101,12 @@
                 <el-table-column
                     prop="date"
                     label="日期"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
                     prop="name"
                     label="姓名"
-                    >
+                >
                 </el-table-column>
                 <el-table-column
                     prop="address"
@@ -122,7 +122,8 @@
 </template>
 
 <script>
-import { phpAPI } from '@/API/api'
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -188,10 +189,16 @@ export default {
       // 删除员工操作
     },
     search() {
+      const data = {username: '111', password: '111'};
+      const jsonStr = JSON.stringify(data)
       // 搜索操作
-      phpAPI({name: this.admin_name, password:'10086'}).then(res =>{
-        debugger
-        res = res;
+      axios({
+            method: "post",
+            url: "test.php",
+            data: jsonStr
+          }
+      ).then((res) => {
+        console.log(res.data);
       })
     },
   },
