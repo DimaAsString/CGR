@@ -17,14 +17,14 @@
             <el-container>
                 <el-main>
                     <div style="">
-                        <el-button type="primary" icon="el-icon-plus" @click="DialogVisible = true">添加员工</el-button>
+                        <el-button type="primary" icon="el-icon-plus" @click="addWoker">添加员工</el-button>
                         <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
                                   placeholder="请输入员工名称"></el-input>
-                        <el-select style=" width: 150px;margin-left: 20px;" v-model="order"
-                                   placeholder="请选择排序方式">
-                            <el-option label="升序" value="asc"></el-option>
-                            <el-option label="倒序" value="desc"></el-option>
-                        </el-select>
+<!--                        <el-select style=" width: 150px;margin-left: 20px;" v-model="order"-->
+<!--                                   placeholder="请选择排序方式">-->
+<!--                            <el-option label="升序" value="asc"></el-option>-->
+<!--                            <el-option label="倒序" value="desc"></el-option>-->
+<!--                        </el-select>-->
                         <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
                             搜索
                         </el-button>
@@ -40,8 +40,8 @@
                             <el-table-column label="昵称" prop="nickname"></el-table-column>
                             <el-table-column label="性别" prop="gender">
                                 <template slot-scope="scope">
-                                    <el-tag :type="scope.row.gender == 1 ? 'success': 'primary'">
-                                        {{ scope.row.gender == 1 ? '男' : '女' }}
+                                    <el-tag :type="scope.row.gender == 0 ? 'success': 'primary'">
+                                        {{ scope.row.gender == 0 ? '男' : '女' }}
                                     </el-tag>
                                 </template>
                             </el-table-column>
@@ -52,7 +52,7 @@
                             <el-table-column label="信息更新时间" prop="updateTime"></el-table-column>
                             <el-table-column label="操作" width="200">
                                 <template slot-scope="scope">
-                                    <el-button type="primary" @click="DialogVisible = true">修改</el-button>
+                                    <el-button type="primary" @click="editInfo(scope.row)">修改</el-button>
                                     <el-dialog
                                             title="提示"
                                             :visible.sync="DialogVisible"
@@ -64,7 +64,7 @@
                                                       style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
                                             <br>
                                             <span style="width: 30%;margin-top: 10px;">员工密码:</span>
-                                            <el-input type="password" v-model="form.password"
+                                            <el-input  v-model="form.password"
                                                       style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
                                             <br>
                                             <span style="width: 30%;margin-top: 10px;">员工昵称:</span>
@@ -90,7 +90,7 @@
 
                                         <span slot="footer" class="dialog-footer">
                       <el-button @click="DialogVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="DialogVisible = false">确 定</el-button>
+                      <el-button type="primary" @click="changeItem(scope.row.id)">确 定</el-button>
                     </span>
                                     </el-dialog>
                                     <el-popconfirm
@@ -99,8 +99,9 @@
                                             confirm-button-text='确认'
                                             cancel-button-text='取消'
                                             icon="el-icon-info"
+                                            @confirm="deleteUser(scope.row)"
                                             icon-color="red">
-                                        <el-button type="danger" @click="deleteUser(scope.row)" slot="reference">删除
+                                        <el-button type="danger" slot="reference">删除
                                         </el-button>
                                     </el-popconfirm>
                                 </template>
@@ -113,7 +114,7 @@
                                 :page-sizes="[10, 20, 30, 40, 50]"
                                 :page-size="pageSize"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="150">
+                                :total="totalNum">
                         </el-pagination>
                     </div>
                 </el-main>
@@ -128,6 +129,8 @@ import axios from "axios";
 export default {
     data() {
         return {
+            status:0, // 0-添加状态，1-修改状态
+            totalNum:20,
             currentPage: 1,
             pageSize: 10,
             DialogVisible: false,
@@ -139,21 +142,11 @@ export default {
                 password: '',
                 confirmPassword: '',
                 nickname: '',
-                gender: '',
+                gender: '0',
                 phone: '',
                 email: ''
             },
             users: [
-                {
-                    name: '陈龙',
-                    nickname: '珅式',
-                    gender: 0,
-                    phone: '13800138000',
-                    email: 'ShenSHI@test.com',
-                    lastLoginTime: '2021-08-01 10:00:00',
-                    registerTime: '2021-01-01 00:00:00',
-                    updateTime: '2021-08-01 10:00:00',
-                },
             ],
         };
     },
@@ -161,6 +154,95 @@ export default {
         this.getList()
     },
     methods: {
+        changeItem(ID){
+            if (this.status == 0){
+                this.addItem();
+            } else {
+                const item = {
+                    "id": ID,
+                    "email": this.form.email,
+                    "gender": parseInt(this.form.gender),
+                    "name": this.form.username,
+                    "nickname": this.form.nickname,
+                    "password": this.form.password,
+                    "phone": this.form.phone,
+                };
+                const jsonStr = JSON.stringify(item);
+                axios({
+                        method: "post",
+                        url: "http://192.168.31.82:9000/adminuser/update",
+                        data: jsonStr
+                    }
+                ).then((res) => {
+                    if (res.data.code == 200){
+                        this.$toast.success('员工添加成功!')
+                        this.DialogVisible = false;
+                        this.getList();
+                    }
+                })
+            }
+        },
+        addItem(){
+            this.DialogVisible = false
+            const item = {
+                name: this.form.username,
+                password: this.form.password,
+                nickname: this.form.nickname,
+                gender: parseInt(this.form.gender),
+                phone: this.form.phone,
+                email: this.form.email
+            }
+
+            const jsonStr = JSON.stringify(item);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/adduser",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                if (res.data.code == 200){
+                    this.$toast.success('员工添加成功!')
+                    this.getList();
+                }
+            })
+        },
+        editInfo(item){
+            this.status = 1;
+            this.DialogVisible = true
+
+            // 查询当前员工信息
+            const data = {id: item.id};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/queryid",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                const item = res.data.data[0];
+                console.log(item)
+                this.form.username = item.name;
+                this.form.password = item.password;
+                this.form.nickname = item.nickname;
+                this.form.gender = ""+item.gender;
+                this.form.phone = item.phone;
+                this.form.email = item.email;
+            })
+        },
+        addWoker(){
+            this.status = 0;
+            // 初始化数据
+            this.form = {
+                username: '',
+                password: '',
+                confirmPassword: '',
+                nickname: '',
+                gender: '0',
+                phone: '',
+                email: ''
+            }
+            this.DialogVisible = true
+        },
         // 初始化页面渲染
         getList() {
             for (let i = 1; i <= 35; i++) {
@@ -176,7 +258,7 @@ export default {
                 }
                 this.users.push(item)
             }
-            const data = {pageid: 1, pagenumber: 1};
+            const data = {pageid: this.currentPage, pagenumber: this.pageSize};
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
@@ -186,10 +268,12 @@ export default {
             ).then((res) => {
                 const item = res.data;
                 console.log(item)
+                this.totalNum = item.totalNumbers;
                 this.users = []
                 for (let i = 0; i < item.data.length; i++) {
                     let base = item.data[i];
                     const tempItem = {
+                        id: base.id,
                         name: base.name,
                         nickname: base.nickname,
                         gender: base.gender,
@@ -213,9 +297,49 @@ export default {
         },
         deleteUser(user) {
             // 删除员工操作
+            console.log(user)
+            const data = {id: user.id};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/del",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                if (res.data.code == 200){
+                    this.$toast.error('员工删除成功!')
+                    this.getList();
+                }
+            })
         },
         search() {
             // 搜索操作
+            const data = {name: this.searchText};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/queryname",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                const item = res.data;
+                this.totalNum = item.data.length;
+                this.users = []
+                for (let i = 0; i < item.data.length; i++) {
+                    let base = item.data[i];
+                    const tempItem = {
+                        name: base.name,
+                        nickname: base.nickname,
+                        gender: base.gender,
+                        phone: base.phone,
+                        email: base.email,
+                        lastLoginTime: base.Logintime.slice(0, 10) + " " + base.Logintime.slice(11, 19),
+                        registerTime: base.Registertime.slice(0, 10) + " " + base.Registertime.slice(11, 19),
+                        updateTime: base.Updatetime.slice(0, 10) + " " + base.Updatetime.slice(11, 19),
+                    }
+                    this.users.push(tempItem)
+                }
+            })
         },
 
         // 跳转到登录页面

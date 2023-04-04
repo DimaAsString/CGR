@@ -48,11 +48,11 @@ export default {
     },
     methods: {
         login() {
-            if (form.username =='' ){
+            if (this.form.username =='' ){
                 this.$toast.error('账号为空，请检查！')
                 return;
             }
-            if (form.password == ''){
+            if (this.form.password == ''){
                 this.$toast.error('密码为空，请检查！')
                 return;
             }
