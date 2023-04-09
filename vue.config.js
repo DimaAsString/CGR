@@ -4,7 +4,7 @@
 // })
 
 module.exports = {
-  devServer: {
-    proxy: 'https://www.chenyizhe.cn/res/'
-  }
+    devServer: {
+        proxy: 'https://www.chenyizhe.cn/res/'
+    }
 }

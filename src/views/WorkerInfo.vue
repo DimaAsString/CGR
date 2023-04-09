@@ -20,11 +20,11 @@
                         <el-button type="primary" icon="el-icon-plus" @click="addWoker">添加员工</el-button>
                         <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
                                   placeholder="请输入员工名称"></el-input>
-<!--                        <el-select style=" width: 150px;margin-left: 20px;" v-model="order"-->
-<!--                                   placeholder="请选择排序方式">-->
-<!--                            <el-option label="升序" value="asc"></el-option>-->
-<!--                            <el-option label="倒序" value="desc"></el-option>-->
-<!--                        </el-select>-->
+                        <!--                        <el-select style=" width: 150px;margin-left: 20px;" v-model="order"-->
+                        <!--                                   placeholder="请选择排序方式">-->
+                        <!--                            <el-option label="升序" value="asc"></el-option>-->
+                        <!--                            <el-option label="倒序" value="desc"></el-option>-->
+                        <!--                        </el-select>-->
                         <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
                             搜索
                         </el-button>
@@ -64,7 +64,7 @@
                                                       style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
                                             <br>
                                             <span style="width: 30%;margin-top: 10px;">员工密码:</span>
-                                            <el-input  v-model="form.password"
+                                            <el-input v-model="form.password"
                                                       style="width: 40%;margin-left: 20px;margin-top: 10px;"></el-input>
                                             <br>
                                             <span style="width: 30%;margin-top: 10px;">员工昵称:</span>
@@ -129,8 +129,8 @@ import axios from "axios";
 export default {
     data() {
         return {
-            status:0, // 0-添加状态，1-修改状态
-            totalNum:20,
+            status: 0, // 0-添加状态，1-修改状态
+            totalNum: 20,
             currentPage: 1,
             pageSize: 10,
             DialogVisible: false,
@@ -146,16 +146,15 @@ export default {
                 phone: '',
                 email: ''
             },
-            users: [
-            ],
+            users: [],
         };
     },
     mounted() {
         this.getList()
     },
     methods: {
-        changeItem(ID){
-            if (this.status == 0){
+        changeItem(ID) {
+            if (this.status == 0) {
                 this.addItem();
             } else {
                 const item = {
@@ -174,7 +173,7 @@ export default {
                         data: jsonStr
                     }
                 ).then((res) => {
-                    if (res.data.code == 200){
+                    if (res.data.code == 200) {
                         this.$toast.success('员工添加成功!')
                         this.DialogVisible = false;
                         this.getList();
@@ -182,7 +181,7 @@ export default {
                 })
             }
         },
-        addItem(){
+        addItem() {
             this.DialogVisible = false
             const item = {
                 name: this.form.username,
@@ -200,13 +199,13 @@ export default {
                     data: jsonStr
                 }
             ).then((res) => {
-                if (res.data.code == 200){
+                if (res.data.code == 200) {
                     this.$toast.success('员工添加成功!')
                     this.getList();
                 }
             })
         },
-        editInfo(item){
+        editInfo(item) {
             this.status = 1;
             this.DialogVisible = true
 
@@ -224,12 +223,12 @@ export default {
                 this.form.username = item.name;
                 this.form.password = item.password;
                 this.form.nickname = item.nickname;
-                this.form.gender = ""+item.gender;
+                this.form.gender = "" + item.gender;
                 this.form.phone = item.phone;
                 this.form.email = item.email;
             })
         },
-        addWoker(){
+        addWoker() {
             this.status = 0;
             // 初始化数据
             this.form = {
@@ -306,7 +305,7 @@ export default {
                     data: jsonStr
                 }
             ).then((res) => {
-                if (res.data.code == 200){
+                if (res.data.code == 200) {
                     this.$toast.error('员工删除成功!')
                     this.getList();
                 }

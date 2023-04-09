@@ -1,162 +1,193 @@
 <template>
-  <div style="height: 100%;">
-    <el-container style="height:100%; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
-        <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
-        <p style="text-align: center; font-size: 14px;">当前操作员：
-          <br> {{ admin_name }}
-        </p>
+    <div style="height: 100%;">
+        <el-container style="height:100%; border: 1px solid #eee">
+            <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
+                <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
+                <p style="text-align: center; font-size: 14px;">当前操作员：
+                    <br> {{ admin_name }}
+                </p>
 
-        <el-menu default-active="2">
-          <el-menu-item index="1" style="text-align: center" @click="gotoShowInfo">概要展示</el-menu-item>
-          <el-menu-item index="2" style="text-align: center">登记签到</el-menu-item>
-          <el-menu-item index="3" style="text-align: center" @click="gotoWokerInfo">员工管理</el-menu-item>
-        </el-menu>
-        <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
-      </el-aside>
-      <el-container>
-        <el-main>
-          <div style="">
-            <el-input style="width: 200px; margin-left: 20px;" v-model="searchText" placeholder="请输入用户签到码"></el-input>
-            <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-            <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">搜索2</el-button>
-          </div>
-          <div >
-            <el-table :data="users" style="width: 100%;  margin: 20px;" :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
-              <el-table-column label="序号" width="50px;">
-                <template slot-scope="scope">{{ scope.$index + 1 }}</template>
-              </el-table-column>
-              <el-table-column label="名称" prop="name"></el-table-column>
-              <el-table-column label="昵称" prop="nickname"></el-table-column>
-              <el-table-column label="性别" prop="gender">
-                <template slot-scope="scope">
-                  <el-tag :type="scope.row.gender == 1 ? 'success': 'primary'">
-                    {{ scope.row.gender == 1 ? '男' : '女' }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="签到码" prop="code"></el-table-column>
-              <el-table-column label="电话" prop="phone"></el-table-column>
-              <el-table-column label="邮箱" prop="email"></el-table-column>
-              <el-table-column label="最近登录时间" prop="lastLoginTime"></el-table-column>
-              <el-table-column label="操作" width="200">
-                <template slot-scope="scope">
-                  <el-popconfirm
-                      style="margin-left: 10px;"
-                      title="是否为当前用户进行签到？"
-                      confirm-button-text='确认'
-                      cancel-button-text='取消'
-                      icon="el-icon-info"
-                      >
-                    <el-button type="primary" @click="editUser(scope.row)" icon="el-icon-edit" slot="reference">场地签到</el-button>
-                  </el-popconfirm>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
+                <el-menu default-active="2">
+                    <el-menu-item index="1" style="text-align: center" @click="gotoShowInfo">概要展示</el-menu-item>
+                    <el-menu-item index="2" style="text-align: center">登记签到</el-menu-item>
+                    <el-menu-item v-if="this.tempUser.level == 2" index="3" style="text-align: center"
+                                  @click="gotoWokerInfo">员工管理
+                    </el-menu-item>
+                </el-menu>
+                <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
+            </el-aside>
+            <el-container>
+                <el-main>
+                    <div style="">
+                        <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
+                                  placeholder="请输入用户签到码"></el-input>
+                        <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
+                            搜索
+                        </el-button>
+                        <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">
+                            搜索2
+                        </el-button>
+                    </div>
+                    <div>
+                        <el-table :data="users" style="width: 100%;  margin: 20px;"
+                                  :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
+                            <el-table-column label="序号" width="50px;">
+                                <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+                            </el-table-column>
+                            <el-table-column label="名称" prop="name"></el-table-column>
+                            <el-table-column label="昵称" prop="nickname"></el-table-column>
+                            <el-table-column label="性别" prop="gender">
+                                <template slot-scope="scope">
+                                    <el-tag :type="scope.row.gender == 1 ? 'success': 'primary'">
+                                        {{ scope.row.gender == 1 ? '男' : '女' }}
+                                    </el-tag>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="签到码" prop="code"></el-table-column>
+                            <el-table-column label="电话" prop="phone"></el-table-column>
+                            <el-table-column label="邮箱" prop="email"></el-table-column>
+                            <el-table-column label="最近登录时间" prop="lastLoginTime"></el-table-column>
+                            <el-table-column label="操作" width="200">
+                                <template slot-scope="scope">
+                                    <el-popconfirm
+                                            style="margin-left: 10px;"
+                                            title="是否为当前用户进行签到？"
+                                            confirm-button-text='确认'
+                                            cancel-button-text='取消'
+                                            icon="el-icon-info"
+                                    >
+                                        <el-button type="primary" @click="editUser(scope.row)" icon="el-icon-edit"
+                                                   slot="reference">场地签到
+                                        </el-button>
+                                    </el-popconfirm>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
+    </div>
 </template>
 
 <script>
 import axios from "axios";
 
 export default {
-  data() {
-    return {
-      admin_name: 'ChenShenShi',
-      searchText: '',
-      order: '',
-      users: [
-        {
-          name: '陈龙',
-          nickname: '珅式',
-          gender: 0,
-          code: '1008',
-          phone: '13800138000',
-          email: 'ShenSHI@test.com',
-          lastLoginTime: '2021-08-01 10:00:00',
+    data() {
+        return {
+            tempUser: {
+                name: 'admin',
+                gender: 0,
+                level: 3,
+            },
+            admin_name: 'ChenShenShi',
+            searchText: '',
+            order: '',
+            users: [
+                {
+                    name: '陈龙',
+                    nickname: '珅式',
+                    gender: 0,
+                    code: '1008',
+                    phone: '13800138000',
+                    email: 'ShenSHI@test.com',
+                    lastLoginTime: '2021-08-01 10:00:00',
+                },
+                {
+                    name: '陈龙',
+                    nickname: '珅式',
+                    gender: 1,
+                    code: '1006',
+                    phone: '13800138000',
+                    email: 'ShenSHI@test.com',
+                    lastLoginTime: '2021-08-01 10:00:00',
+                },
+            ],
+        };
+    },
+    mounted() {
+        this.initUser();
+    },
+    methods: {
+        initUser() {
+            const userId = parseInt(this.$route.query.id);
+            const data = {id: userId};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/queryid",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                this.tempUser = res.data.data[0];
+            })
         },
-        {
-          name: '陈龙',
-          nickname: '珅式',
-          gender: 1,
-          code: '1006',
-          phone: '13800138000',
-          email: 'ShenSHI@test.com',
-          lastLoginTime: '2021-08-01 10:00:00',
+        editUser(user) {
+            // 编辑员工操作
         },
-      ],
-    };
-  },
-  methods: {
-    editUser(user) {
-      // 编辑员工操作
-    },
-    deleteUser(user) {
-      // 删除员工操作
-    },
-    search() {
-      // 搜索操作
-      const data = {username: '222', password: '222'};
-      const jsonStr = JSON.stringify(data)
-      // 搜索操作
-      axios({
-            method: "post",
-            url: "test.php",
-            data: jsonStr
-          }
-      ).then((res) => {
-        console.log(res.data);
-      })
+        deleteUser(user) {
+            // 删除员工操作
+        },
+        search() {
+            // 搜索操作
+            const data = {username: '222', password: '222'};
+            const jsonStr = JSON.stringify(data)
+            // 搜索操作
+            axios({
+                    method: "post",
+                    url: "test.php",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                console.log(res.data);
+            })
 
-    },
-    search2() {
-      // 搜索操作
-      const data = {name: '1', password: '1'};
-      const jsonStr = JSON.stringify(data)
-      // 搜索操作
-      axios({
-            method: "post",
-            url: "http://192.168.31.178:9000/adminuser/checkpasswd",
-            data: jsonStr
-          }
-      ).then((res) => {
-        console.log(res.data);
-      })
+        },
+        search2() {
+            // 搜索操作
+            const data = {name: '1', password: '1'};
+            const jsonStr = JSON.stringify(data)
+            // 搜索操作
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.178:9000/adminuser/checkpasswd",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                console.log(res.data);
+            })
 
-    },
-    // 跳转到登录页面
-    gotoTopPage(){
-      this.$toast.error('退出成功')
-      setTimeout(() => {
-        this.$router.push('/')
-      }, 1500)
-    },
+        },
+        // 跳转到登录页面
+        gotoTopPage() {
+            this.$toast.error('退出成功')
+            setTimeout(() => {
+                this.$router.push('/')
+            }, 1500)
+        },
 
-    // 跳转到员工管理页面
-    gotoWokerInfo(){
-      this.$router.push('/WorkerInfo')
-    },
+        // 跳转到员工管理页面
+        gotoWokerInfo() {
+            this.$router.push('/WorkerInfo?id=' + this.$route.query.id)
+        },
 
-    // 跳转到概要展示页面
-    gotoShowInfo(){
-      this.$router.push('/ShowInfo')
-    }
-  },
+        // 跳转到概要展示页面
+        gotoShowInfo() {
+            this.$router.push('/ShowInfo?id=' + this.$route.query.id)
+        }
+    },
 };
 </script>
 
 <style>
 .el-header {
-  background-color: #B3C0D1;
-  color: #333;
-  line-height: 60px;
+    background-color: #B3C0D1;
+    color: #333;
+    line-height: 60px;
 }
 
 .el-aside {
-  color: #333;
+    color: #333;
 }
 </style>

@@ -57,7 +57,7 @@ export default {
                 return;
             }
             // 搜索操作
-            const data = {name: 'admin', password: 'ping0000'};
+            const data = {name: this.form.username, password: this.form.password};
             const jsonStr = JSON.stringify(data);
             // 搜索操作
             axios({
@@ -70,7 +70,7 @@ export default {
                 if (item.loginStatus) {
                     this.$toast.success('登录成功')
                     setTimeout(() => {
-                        this.$router.push('/ShowInfo?'+item.id)
+                        this.$router.push('/ShowInfo?id=' + item.id)
                     }, 1500)
                 } else {
                     this.$toast.error('登录失败，请检查账号密码')
