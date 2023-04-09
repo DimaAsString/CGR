@@ -10,7 +10,7 @@
                 <el-menu default-active="3">
                     <el-menu-item index="1" style="text-align: center" @click="gotoShowInfo">概要展示</el-menu-item>
                     <el-menu-item index="2" style="text-align: center" @click="gotoUserInfo">登记签到</el-menu-item>
-                    <el-menu-item index="3" style="text-align: center">员工管理</el-menu-item>
+                    <el-menu-item v-if="this.tempUser.level == 2" index="3" style="text-align: center">员工管理</el-menu-item>
                 </el-menu>
                 <el-button type="danger" @click="gotoTopPage" style="margin-top: 20px;">退出登录</el-button>
             </el-aside>
@@ -129,6 +129,11 @@ import axios from "axios";
 export default {
     data() {
         return {
+            tempUser: {
+                name: 'admin',
+                gender: 0,
+                level: 3,
+            },
             status: 0, // 0-添加状态，1-修改状态
             totalNum: 20,
             currentPage: 1,
@@ -150,9 +155,23 @@ export default {
         };
     },
     mounted() {
-        this.getList()
+        this.getList();
+        this.initUser();
     },
     methods: {
+        initUser() {
+            const userId = parseInt(this.$route.query.id);
+            const data = {id: userId};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/adminuser/queryid",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                this.tempUser = res.data.data[0];
+            })
+        },
         changeItem(ID) {
             if (this.status == 0) {
                 this.addItem();
@@ -351,12 +370,12 @@ export default {
 
         // 跳转到概要展示页面
         gotoShowInfo() {
-            this.$router.push('/ShowInfo')
+            this.$router.push('/ShowInfo?id='+ this.$route.query.id)
         },
 
         // 跳转到用户签到页面
         gotoUserInfo() {
-            this.$router.push('/UserInfo')
+            this.$router.push('/UserInfo?id='+ this.$route.query.id)
         },
     },
 };
