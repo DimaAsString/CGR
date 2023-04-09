@@ -183,12 +183,12 @@ export default {
       ],
     };
   },
-  methods: {
-    editUser(user) {
-      // 编辑员工操作
+    mounted() {
+        this.initUser();
     },
-    deleteUser(user) {
-      // 删除员工操作
+    methods: {
+    initUser() {
+
     },
     search() {
       const data = {username: '111', password: '111'};

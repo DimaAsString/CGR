@@ -48,11 +48,11 @@ export default {
     },
     methods: {
         login() {
-            if (this.form.username =='' ){
+            if (this.form.username == '') {
                 this.$toast.error('账号为空，请检查！')
                 return;
             }
-            if (this.form.password == ''){
+            if (this.form.password == '') {
                 this.$toast.error('密码为空，请检查！')
                 return;
             }
@@ -70,7 +70,7 @@ export default {
                 if (item.loginStatus) {
                     this.$toast.success('登录成功')
                     setTimeout(() => {
-                        this.$router.push('/ShowInfo')
+                        this.$router.push('/ShowInfo?'+item.id)
                     }, 1500)
                 } else {
                     this.$toast.error('登录失败，请检查账号密码')
