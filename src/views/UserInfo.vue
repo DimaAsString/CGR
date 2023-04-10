@@ -24,12 +24,12 @@
                         <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
                             搜索
                         </el-button>
-                        <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">
-                            搜索2
-                        </el-button>
+<!--                        <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">-->
+<!--                            搜索2-->
+<!--                        </el-button>-->
                     </div>
-                    <div>
-                        <el-table :data="users" style="width: 100%;  margin: 20px;"
+                    <div style="height: 84%">
+                        <el-table :data="users"  height="100%" style="width: 100%;  margin: 20px;"
                                   :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
                             <el-table-column label="序号" width="50px;">
                                 <template slot-scope="scope">{{ scope.$index + 1 }}</template>
@@ -55,14 +55,24 @@
                                             confirm-button-text='确认'
                                             cancel-button-text='取消'
                                             icon="el-icon-info"
+                                            @confirm="editUser(scope.row)"
                                     >
-                                        <el-button type="primary" @click="editUser(scope.row)" icon="el-icon-edit"
+                                        <el-button type="primary"  icon="el-icon-edit"
                                                    slot="reference">场地签到
                                         </el-button>
                                     </el-popconfirm>
                                 </template>
                             </el-table-column>
                         </el-table>
+                        <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="[10, 20, 30, 40, 50]"
+                                :page-size="pageSize"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalNum">
+                        </el-pagination>
                     </div>
                 </el-main>
             </el-container>
@@ -84,6 +94,9 @@ export default {
             admin_name: 'ChenShenShi',
             searchText: '',
             order: '',
+            currentPage: 1,
+            pageSize: 10,
+            totalNum: 20,
             users: [
                 {
                     name: '陈龙',
@@ -108,8 +121,45 @@ export default {
     },
     mounted() {
         this.initUser();
+        this.getList();
     },
     methods: {
+        handleSizeChange(val) {
+            this.pageSize = val;
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            console.log(`当前页: ${val}`);
+        },
+        getList() {
+            const data = {pageid: this.currentPage, pagenumber: this.pageSize};
+            const jsonStr = JSON.stringify(data);
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/order/all",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                const dataList = res.data.data;
+                this.totalNum = res.data.totalNumbers;
+                    this.users = [];
+                for (let i = 0; i < dataList.length; i++) {
+                    const tempItem = dataList[i];
+                    const pushItem = {
+                        id: tempItem.id,
+                        name: tempItem.name,
+                        nickname: tempItem.nickname,
+                        gender: tempItem.gender,
+                        code: tempItem.code,
+                        phone: tempItem.phone,
+                        email: tempItem.email,
+                        lastLoginTime: tempItem.Logintime.slice(0, 10) + " " + tempItem.Logintime.slice(11, 19),
+                    }
+                    this.users.push(pushItem);
+                }
+            })
+        },
         initUser() {
             const userId = parseInt(this.$route.query.id);
             const data = {id: userId};
@@ -125,24 +175,54 @@ export default {
         },
         editUser(user) {
             // 编辑员工操作
+            console.log(user)
         },
         deleteUser(user) {
             // 删除员工操作
         },
         search() {
-            // 搜索操作
-            const data = {username: '222', password: '222'};
-            const jsonStr = JSON.stringify(data)
-            // 搜索操作
+            // // 搜索操作
+            // const data = {username: '222', password: '222'};
+            // const jsonStr = JSON.stringify(data)
+            // // 搜索操作
+            // axios({
+            //         method: "post",
+            //         url: "test.php",
+            //         data: jsonStr
+            //     }
+            // ).then((res) => {
+            //     console.log(res.data);
+            // })
+            if (this.searchText == ''){
+                this.getList();
+                return;
+            }
+            const data = {code: parseInt(this.searchText)};
+            const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "test.php",
+                    url: "http://192.168.31.82:9000/order/code",
                     data: jsonStr
                 }
             ).then((res) => {
-                console.log(res.data);
+                const dataList = res.data.data;
+                this.users = [];
+                this.totalNum = 1;
+                for (let i = 0; i < dataList.length; i++) {
+                    const tempItem = dataList[i];
+                    const pushItem = {
+                        id: tempItem.id,
+                        name: tempItem.name,
+                        nickname: tempItem.nickname,
+                        gender: tempItem.gender,
+                        code: tempItem.code,
+                        phone: tempItem.phone,
+                        email: tempItem.email,
+                        lastLoginTime: tempItem.Logintime.slice(0, 10) + " " + tempItem.Logintime.slice(11, 19),
+                    }
+                    this.users.push(pushItem);
+                }
             })
-
         },
         search2() {
             // 搜索操作
