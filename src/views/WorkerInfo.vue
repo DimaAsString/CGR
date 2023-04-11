@@ -2,9 +2,9 @@
     <div style="height: 100%;">
         <el-container style="height:100%; border: 1px solid #eee">
             <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
-                <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
+                <img src="../assets/headIMG.jpg" style="height: 200px; width: 200px;">
                 <p style="text-align: center; font-size: 14px;">当前操作员：
-                    <br> {{ admin_name }}
+                    <br> {{ tempUser.name }}
                 </p>
 
                 <el-menu default-active="3">
@@ -20,11 +20,6 @@
                         <el-button type="primary" icon="el-icon-plus" @click="addWoker">添加员工</el-button>
                         <el-input style="width: 200px; margin-left: 20px;" v-model="searchText"
                                   placeholder="请输入员工名称"></el-input>
-                        <!--                        <el-select style=" width: 150px;margin-left: 20px;" v-model="order"-->
-                        <!--                                   placeholder="请选择排序方式">-->
-                        <!--                            <el-option label="升序" value="asc"></el-option>-->
-                        <!--                            <el-option label="倒序" value="desc"></el-option>-->
-                        <!--                        </el-select>-->
                         <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
                             搜索
                         </el-button>
@@ -331,6 +326,10 @@ export default {
             })
         },
         search() {
+            if (this.searchText == "") {
+                this.getList()
+                return
+            }
             // 搜索操作
             const data = {name: this.searchText};
             const jsonStr = JSON.stringify(data);

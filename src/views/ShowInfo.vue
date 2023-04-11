@@ -2,9 +2,9 @@
     <div style="height: 100%;">
         <el-container style="height:100%; border: 1px solid #eee">
             <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
-                <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
+                <img src="../assets/headIMG.jpg" style="height: 200px; width: 200px;">
                 <p style="text-align: center; font-size: 14px;">当前操作员：
-                    <br> {{ admin_name }}
+                    <br> {{ tempUser.name }}
                 </p>
 
                 <el-menu default-active="1">
@@ -25,8 +25,8 @@
                             <div style="padding: 14px;">
                                 <span>篮球场</span>
                                 <div style="margin-top: 5px;">
-                                    <el-tag>已签：20人</el-tag>
-                                    <el-tag type="danger" style="margin-left: 10px">未签：20人</el-tag>
+                                    <el-tag>已签：{{ this.sportList[0].signinNum }}人</el-tag>
+                                    <el-tag type="danger" style="margin-left: 10px">未签：{{ this.sportList[0].notsigninNum }}人</el-tag>
                                 </div>
                             </div>
                         </el-card>
@@ -37,8 +37,8 @@
                             <div style="padding: 14px;">
                                 <span>乒乓球场</span>
                                 <div style="margin-top: 5px;">
-                                    <el-tag>已签：20人</el-tag>
-                                    <el-tag type="danger" style="margin-left: 10px">未签：20人</el-tag>
+                                    <el-tag>已签：{{ this.sportList[1].signinNum }}人</el-tag>
+                                    <el-tag type="danger" style="margin-left: 10px">未签：{{ this.sportList[1].notsigninNum }}人</el-tag>
                                 </div>
                             </div>
                         </el-card>
@@ -49,8 +49,8 @@
                             <div style="padding: 14px;">
                                 <span>羽毛球场</span>
                                 <div style="margin-top: 5px;">
-                                    <el-tag>已签：20人</el-tag>
-                                    <el-tag type="danger" style="margin-left: 10px">未签：20人</el-tag>
+                                    <el-tag>已签：{{ this.sportList[2].signinNum }}人</el-tag>
+                                    <el-tag type="danger" style="margin-left: 10px">未签：{{ this.sportList[2].notsigninNum }}人</el-tag>
                                 </div>
                             </div>
                         </el-card>
@@ -61,8 +61,8 @@
                             <div style="padding: 14px;">
                                 <span>网球场</span>
                                 <div style="margin-top: 5px;">
-                                    <el-tag>已签：20人</el-tag>
-                                    <el-tag type="danger" style="margin-left: 10px">未签：20人</el-tag>
+                                    <el-tag>已签：{{ this.sportList[3].signinNum }}人</el-tag>
+                                    <el-tag type="danger" style="margin-left: 10px">未签：{{ this.sportList[3].notsigninNum }}人</el-tag>
                                 </div>
                             </div>
                         </el-card>
@@ -74,7 +74,7 @@
                     <div id="down_list">
                         <div style="width: 40%; height: 250px;">
                             <el-table
-                                    :data="tableData"
+                                    :data="signinList"
                                     height="100%"
                                     border
                                     style="width: 100%;">
@@ -97,7 +97,7 @@
                         </div>
                         <div style="width: 40%; height: 250px; margin-left: 100px;">
                             <el-table
-                                    :data="tableData"
+                                    :data="notsigninList"
                                     height="100%"
                                     border
                                     style="width: 100%;">
@@ -139,35 +139,10 @@ export default {
             admin_name: 'ChenShenShi',
             searchText: '',
             order: '',
-            tableData: [{
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-08',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-06',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-07',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }],
+            tableData: [],
+            signinList: [],
+            notsigninList: [],
+            sportList: [],
             users: [
                 {
                     name: '陈龙',
@@ -192,8 +167,40 @@ export default {
     },
     mounted() {
         this.initUser();
+        this.getList();
     },
     methods: {
+        //  展示页查询数据
+        getList() {
+            const jsonStr = JSON.stringify({});
+            axios({
+                    method: "post",
+                    url: "http://192.168.31.82:9000/order/signin",
+                    data: jsonStr
+                }
+            ).then((res) => {
+                console.log(res.data)
+                this.signinList = []
+                this.notsigninList = []
+                this.sportList = res.data.siginsport
+                for (let i = 0; i < res.data.signinList.length; i++) {
+                    const tempItem = res.data.signinList[i]
+                    const item = {
+                        date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
+                        name: tempItem.name,
+                    }
+                    this.signinList.push(item)
+                }
+                for (let i = 0; i < res.data.notsigninList.length; i++) {
+                    const tempItem = res.data.notsigninList[i]
+                    const item = {
+                        date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
+                        name: tempItem.name,
+                    }
+                    this.notsigninList.push(item)
+                }
+            })
+        },
         initUser() {
             const userId = parseInt(this.$route.query.id);
             const data = {id: userId};
@@ -236,8 +243,8 @@ export default {
                 this.$router.push('/')
             }, 1500)
         }
-
     },
+
 };
 </script>
 

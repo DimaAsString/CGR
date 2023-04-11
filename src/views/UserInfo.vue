@@ -2,9 +2,9 @@
     <div style="height: 100%;">
         <el-container style="height:100%; border: 1px solid #eee">
             <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
-                <img src="../assets/admin_icon.png" style="height: 200px; width: 200px;">
+                <img src="../assets/headIMG.jpg" style="height: 200px; width: 200px;">
                 <p style="text-align: center; font-size: 14px;">当前操作员：
-                    <br> {{ admin_name }}
+                    <br> {{ tempUser.name }}
                 </p>
 
                 <el-menu default-active="2">
