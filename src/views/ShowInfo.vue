@@ -175,7 +175,7 @@ export default {
             const jsonStr = JSON.stringify({});
             axios({
                     method: "post",
-                    url: "http://localhost:9000/order/signin",
+                    url: "http://192.168.50.86:9000/order/signin",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -207,7 +207,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://localhost:9000/adminuser/queryid",
+                    url: "http://192.168.50.86:9000/adminuser/queryid",
                     data: jsonStr
                 }
             ).then((res) => {

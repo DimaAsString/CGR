@@ -162,7 +162,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://localhost:9000/order/all",
+                    url: "http://192.168.50.86:9000/order/all",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -192,7 +192,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://localhost:9000/adminuser/queryid",
+                    url: "http://192.168.50.86:9000/adminuser/queryid",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -207,7 +207,7 @@ export default {
             if (user.signin == 1){
                 axios({
                         method: "post",
-                        url: "http://localhost:9000/order/UpdateSigninBy0",
+                        url: "http://192.168.50.86:9000/order/UpdateSigninBy0",
                         data: jsonStr
                     }
                 ).then((res) => {
@@ -218,7 +218,7 @@ export default {
             } else {
                 axios({
                         method: "post",
-                        url: "http://localhost:9000/order/UpdateSigninBy1",
+                        url: "http://192.168.50.86:9000/order/UpdateSigninBy1",
                         data: jsonStr
                     }
                 ).then((res) => {
@@ -252,7 +252,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://localhost:9000/order/code",
+                    url: "http://192.168.50.86:9000/order/code",
                     data: jsonStr
                 }
             ).then((res) => {

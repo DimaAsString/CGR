@@ -62,7 +62,7 @@ export default {
             // 搜索操作
             axios({
                     method: "post",
-                    url: "http://localhost:9000/adminuser/checkpasswd",
+                    url: "http://192.168.50.86:9000/adminuser/checkpasswd",
                     data: jsonStr
                 }
             ).then((res) => {
