@@ -160,7 +160,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/queryid",
+                    url: "http://localhost:9000/adminuser/queryid",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -183,7 +183,7 @@ export default {
                 const jsonStr = JSON.stringify(item);
                 axios({
                         method: "post",
-                        url: "http://192.168.31.82:9000/adminuser/update",
+                        url: "http://localhost:9000/adminuser/update",
                         data: jsonStr
                     }
                 ).then((res) => {
@@ -209,7 +209,7 @@ export default {
             const jsonStr = JSON.stringify(item);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/adduser",
+                    url: "http://localhost:9000/adminuser/adduser",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -228,7 +228,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/queryid",
+                    url: "http://localhost:9000/adminuser/queryid",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -275,7 +275,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/all",
+                    url: "http://localhost:9000/adminuser/all",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -315,7 +315,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/del",
+                    url: "http://localhost:9000/adminuser/del",
                     data: jsonStr
                 }
             ).then((res) => {
@@ -335,7 +335,7 @@ export default {
             const jsonStr = JSON.stringify(data);
             axios({
                     method: "post",
-                    url: "http://192.168.31.82:9000/adminuser/queryname",
+                    url: "http://localhost:9000/adminuser/queryname",
                     data: jsonStr
                 }
             ).then((res) => {
