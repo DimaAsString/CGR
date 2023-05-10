@@ -142,7 +142,28 @@ export default {
             tableData: [],
             signinList: [],
             notsigninList: [],
-            sportList: [],
+            sportList: [
+                {
+                    signinNum: 0,
+                    notsigninNum: 0,
+                    sportid: 1,
+                },
+                {
+                    signinNum: 0,
+                    notsigninNum: 0,
+                    sportid: 2,
+                },
+                {
+                    signinNum: 0,
+                    notsigninNum: 0,
+                    sportid: 3,
+                },
+                {
+                    signinNum: 0,
+                    notsigninNum: 0,
+                    sportid: 4,
+                },
+            ],
             users: [
                 {
                     name: '陈龙',
@@ -183,21 +204,26 @@ export default {
                 this.signinList = []
                 this.notsigninList = []
                 this.sportList = res.data.siginsport
-                for (let i = 0; i < res.data.signinList.length; i++) {
-                    const tempItem = res.data.signinList[i]
-                    const item = {
-                        date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
-                        name: tempItem.name,
+                if(res.data.signinList != null){
+                    for (let i = 0; i < res.data.signinList.length; i++) {
+                        const tempItem = res.data.signinList[i]
+                        const item = {
+                            date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
+                            name: tempItem.name,
+                        }
+                        this.signinList.push(item)
                     }
-                    this.signinList.push(item)
                 }
-                for (let i = 0; i < res.data.notsigninList.length; i++) {
-                    const tempItem = res.data.notsigninList[i]
-                    const item = {
-                        date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
-                        name: tempItem.name,
+                
+                if(res.data.notsigninList != null){
+                    for (let i = 0; i < res.data.notsigninList.length; i++) {
+                        const tempItem = res.data.notsigninList[i]
+                        const item = {
+                            date: tempItem.orderdate.slice(0, 10) + " " + tempItem.orderdate.slice(11, 19),
+                            name: tempItem.name,
+                        }
+                        this.notsigninList.push(item)
                     }
-                    this.notsigninList.push(item)
                 }
             })
         },
