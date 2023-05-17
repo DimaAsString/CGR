@@ -258,19 +258,8 @@ export default {
         },
         // 初始化页面渲染
         getList() {
-            for (let i = 1; i <= 35; i++) {
-                const item = {
-                    name: '陈龙',
-                    nickname: '珅式',
-                    gender: 0,
-                    phone: '13800138000',
-                    email: 'ShenSHI@test.com',
-                    lastLoginTime: '2021-08-01 10:00:00',
-                    registerTime: '2021-01-01 00:00:00',
-                    updateTime: '2021-08-01 10:00:00',
-                }
-                this.users.push(item)
-            }
+            // 初始化页面数据
+            this.users = []
             const data = {pageid: this.currentPage, pagenumber: this.pageSize};
             const jsonStr = JSON.stringify(data);
             axios({
@@ -303,10 +292,12 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             console.log(`每页 ${val} 条`);
+            this.getList()
         },
         handleCurrentChange(val) {
             this.currentPage = val;
             console.log(`当前页: ${val}`);
+            this.getList()
         },
         deleteUser(user) {
             // 删除员工操作

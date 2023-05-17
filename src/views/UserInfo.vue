@@ -35,9 +35,6 @@
                         <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search">
                             搜索
                         </el-button>
-                        <!--                        <el-button style="margin-left: 20px;" type="primary" icon="el-icon-search" @click="search2">-->
-                        <!--                            搜索2-->
-                        <!--                        </el-button>-->
                     </div>
                     <div style="height: 84%">
                         <el-table :data="users" height="100%" style="width: 100%;  margin: 20px;"
@@ -152,10 +149,12 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             console.log(`每页 ${val} 条`);
+            this.getList();
         },
         handleCurrentChange(val) {
             this.currentPage = val;
             console.log(`当前页: ${val}`);
+            this.getList();
         },
         getList() {
             const data = {pageid: this.currentPage, pagenumber: this.pageSize, selectType: this.selectType};
@@ -228,22 +227,7 @@ export default {
                 })
             }
         },
-        deleteUser(user) {
-            // 删除员工操作
-        },
         search() {
-            // // 搜索操作
-            // const data = {username: '222', password: '222'};
-            // const jsonStr = JSON.stringify(data)
-            // // 搜索操作
-            // axios({
-            //         method: "post",
-            //         url: "test.php",
-            //         data: jsonStr
-            //     }
-            // ).then((res) => {
-            //     console.log(res.data);
-            // })
             if (this.searchText == '') {
                 this.getList();
                 return;
@@ -275,21 +259,6 @@ export default {
                     this.users.push(pushItem);
                 }
             })
-        },
-        search2() {
-            // 搜索操作
-            const data = {name: '1', password: '1'};
-            const jsonStr = JSON.stringify(data)
-            // 搜索操作
-            axios({
-                    method: "post",
-                    url: "http://192.168.31.178:9000/adminuser/checkpasswd",
-                    data: jsonStr
-                }
-            ).then((res) => {
-                console.log(res.data);
-            })
-
         },
         // 跳转到登录页面
         gotoTopPage() {
