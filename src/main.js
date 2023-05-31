@@ -5,7 +5,6 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/globe.css';
 import Login from "@/views/Login.vue";
-import WorkerInfo from "@/views/WorkerInfo.vue";
 import UserInfo from "@/views/UserInfo.vue";
 import ShowInfo from "@/views/ShowInfo.vue";
 
